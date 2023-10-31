@@ -13,8 +13,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="card card-2 w-100">
+            <div class="card card-2 w-100">
             <table class="m-4">
                 <tbody>
                     <tr>
@@ -32,12 +31,18 @@
                 </tbody>
             </table>
 
+            <DaysWeather>
+
+            </DaysWeather>
+
             <div id="div_Form" class="d-flex m-3 justify-content-center">
                 <form action="">
                     <input type="button" value="Change Location" class="btn change-btn btn-primary">
                 </form>
             </div>
         </div>
+        </div>
+        
     </div>
 </template>
   
@@ -52,12 +57,27 @@
   
   
 <script>
+import DaysWeather from './DaysWeather.vue'
+import axios from 'axios';
 
 export default {
-    name: 'myWeatherApp',
+    name: 'myWeather',
   components: {
-  
+    DaysWeather,
   },
+  props: {
+    city: String,
+  },
+  data(){
+    return{
+
+    }
+  },
+
+  async created(){
+    const response = await axios.get(`https://api.openweathermap.org/data/2.5/onecall?q=${this.city}&units=metric&appid=8331cdef4f10633c84fd856ce65588b0`)
+    console.log(response);
+  }
 }
 
 
@@ -88,13 +108,13 @@ h2.mb-1.day{
 
 .main-div{
     border-radius: 20px;
-    color: #fff;
+    color: #fff !important;
     background-image: url("/src/assets/img/background.jpg");
     background-size: cover;
     background-position: center;
     background-color: rgba(0, 0, 0, 0.5);
     background-repeat: no-repeat;
-    /* background-blend-mode: overlay; */
+   /*  background-blend-mode: overlay; */
 }
 
 .temp{
@@ -169,6 +189,9 @@ table, tr:hover{
     transition: transform 0.1s ease;
 }
 
+.card{
+    background-color: #212730 !important;
+}
 
 
 </style>
