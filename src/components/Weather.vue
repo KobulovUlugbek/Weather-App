@@ -6,7 +6,7 @@
                     <h2 class="mb-1 day">Tuesday</h2>
                     <p class="text-light date mb-0">date</p>
                     <small>time</small>
-                    <h2 class="place"><i class="fa fa-location">Rio  <small>Country</small></i></h2>
+                    <h2 class="place"><i class="fa fa-location">Rio <small>Country</small></i></h2>
                     <div class="temp">
                         <h1 class="weather-temp">19&deg;</h1>
                         <h2 class="text-light">description</h2>
@@ -14,35 +14,35 @@
                 </div>
             </div>
             <div class="card card-2 w-100">
-            <table class="m-4">
-                <tbody>
-                    <tr>
-                        <th>Sea Level</th>
-                        <th>100</th>
-                    </tr>
-                    <tr>
-                        <th>Sea Level</th>
-                        <th>100</th>
-                    </tr>
-                    <tr>
-                        <th>Sea Level</th>
-                        <th>100</th>
-                    </tr>
-                </tbody>
-            </table>
+                <table class="m-4">
+                    <tbody>
+                        <tr>
+                            <th>Sea Level</th>
+                            <th>100</th>
+                        </tr>
+                        <tr>
+                            <th>Sea Level</th>
+                            <th>100</th>
+                        </tr>
+                        <tr>
+                            <th>Sea Level</th>
+                            <th>100</th>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <DaysWeather>
+                <DaysWeather>
 
-            </DaysWeather>
+                </DaysWeather>
 
-            <div id="div_Form" class="d-flex m-3 justify-content-center">
-                <form action="">
-                    <input type="button" value="Change Location" class="btn change-btn btn-primary">
-                </form>
+                <div id="div_Form" class="d-flex m-3 justify-content-center">
+                    <form action="">
+                        <input type="button" value="Change Location" class="btn change-btn btn-primary">
+                    </form>
+                </div>
             </div>
         </div>
-        </div>
-        
+
     </div>
 </template>
   
@@ -60,25 +60,52 @@
 import DaysWeather from './DaysWeather.vue'
 import axios from 'axios';
 
-export default {
+export default (await import('vue')).defineComponent({
     name: 'myWeather',
-  components: {
-    DaysWeather,
-  },
-  props: {
-    city: String,
-  },
-  data(){
-    return{
+    components: {
+        DaysWeather,
+    },
+    props: {
+        city: String,
+    },
+    data() {
+        return {
+            temperature: null,
+            description: null,
+            iconUrl: null,
+            date: null,
+            time: null,
+            name: null,
+            monthName: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ],
+        }
+    },
 
+    async created() {
+        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=239c6eca0d4cd9e1d9ec4e06de18eed6`);
+        const weatherData = response.data;
+        this.temperature = weatherData.main.temp;
+        this.description = weatherData.weather[0].description;
+        this.name = weatherData.name;
+        this.iconUrl = `https://api.openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
+        const d = new Date();
+        this.date = d.getDate() + '-' + this.monthName[d.getMonth()] + '-' + d.getFullYear();
+        this.time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+        console.log(weatherData);
     }
-  },
-
-  async created(){
-    const response = await axios.get(`https://api.openweathermap.org/data/2.5/onecall?q=${this.city}&units=metric&appid=8331cdef4f10633c84fd856ce65588b0`)
-    console.log(response);
-  }
-}
+})
 
 
 </script>
@@ -90,23 +117,22 @@ export default {
   
   
 <style>
-
-body{
+body {
     background-color: #343d4b;
 }
 
-.weather-temp{
+.weather-temp {
     margin: 0;
     font-weight: 700;
     font-size: 4rem;
 }
 
-h2.mb-1.day{
+h2.mb-1.day {
     font-size: 3rem;
     font-weight: 400;
 }
 
-.main-div{
+.main-div {
     border-radius: 20px;
     color: #fff !important;
     background-image: url("/src/assets/img/background.jpg");
@@ -114,30 +140,30 @@ h2.mb-1.day{
     background-position: center;
     background-color: rgba(0, 0, 0, 0.5);
     background-repeat: no-repeat;
-   /*  background-blend-mode: overlay; */
+    /*  background-blend-mode: overlay; */
 }
 
-.temp{
+.temp {
     position: absolute;
     bottom: 0;
 }
 
-.main-div:hover{
+.main-div:hover {
     transform: scale(1.1);
     transition: transform 0.5s ease;
     z-index: 1;
 }
 
-.card-2{
+.card-2 {
     background-color: #212730;
     border-radius: 20px;
 }
 
-.card-details{
+.card-details {
     margin-left: 19px;
 }
 
-.h1_left{
+.h1_left {
     position: absolute;
     bottom: 25px;
     left: 16px;
@@ -145,18 +171,18 @@ h2.mb-1.day{
     line-height: 1.2;
 }
 
-.h3_left{
+.h3_left {
     position: absolute;
     left: 16px;
     font-size: 2vw;
     line-height: 0.5;
 }
 
-.h3_left small{
+.h3_left small {
     font-size: 1rem;
 }
 
-table{
+table {
     position: relative;
     left: 15px;
     border-collapse: separate;
@@ -167,32 +193,32 @@ table{
     margin: 0 auto;
 }
 
-th, td{
+th,
+td {
     font-size: 18px;
     color: #fff;
 }
 
-td{
+td {
     text-align: right;
 }
 
-table, tr:hover{
+table,
+tr:hover {
     color: red;
 }
 
-.change-btn{
+.change-btn {
     background-image: linear-gradient(to right, cyan, magenta);
 }
 
-.change-btn:hover{
+.change-btn:hover {
     transform: scale(0.9);
     transition: transform 0.1s ease;
 }
 
-.card{
+.card {
     background-color: #212730 !important;
 }
-
-
 </style>
   
