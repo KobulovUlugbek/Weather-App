@@ -3,13 +3,13 @@
         <div class="d-flex">
             <div class="card main-div w-100">
                 <div class="p-3">
-                    <h2 class="mb-1 day">Tuesday</h2>
-                    <p class="text-light date mb-0">date</p>
-                    <small>time</small>
-                    <h2 class="place"><i class="fa fa-location">Rio <small>Country</small></i></h2>
+                    <h2 class="mb-1 day">Today</h2>
+                    <p class="text-light date mb-0">{{date}}</p>
+                    <small>{{time}}</small>
+                    <h2 class="place"><i class="fa fa-location">{{name}} <small>{{country}}</small></i></h2>
                     <div class="temp">
-                        <h1 class="weather-temp">19&deg;</h1>
-                        <h2 class="text-light">description</h2>
+                        <h1 class="weather-temp">{{temperature}}&deg;</h1>
+                        <h2 class="text-light">{{description}} <img :src="iconUrl"></h2>
                     </div>
                 </div>
             </div>
@@ -18,15 +18,15 @@
                     <tbody>
                         <tr>
                             <th>Sea Level</th>
-                            <th>100</th>
+                            <th>{{sea_level}}</th>
                         </tr>
                         <tr>
-                            <th>Sea Level</th>
-                            <th>100</th>
+                            <th>Humidity</th>
+                            <th>{{humidity}}</th>
                         </tr>
                         <tr>
-                            <th>Sea Level</th>
-                            <th>100</th>
+                            <th>Wind</th>
+                            <th>{{wind}}</th>
                         </tr>
                     </tbody>
                 </table>
@@ -76,6 +76,10 @@ export default (await import('vue')).defineComponent({
             date: null,
             time: null,
             name: null,
+            sea_level: null,
+            wind: null,
+            humidity: null,
+            country: null,
             monthName: [
                 "January",
                 "February",
@@ -96,16 +100,23 @@ export default (await import('vue')).defineComponent({
     async created() {
         const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=239c6eca0d4cd9e1d9ec4e06de18eed6`);
         const weatherData = response.data;
-        this.temperature = weatherData.main.temp;
+        this.temperature = Math.round(weatherData.main.temp);
         this.description = weatherData.weather[0].description;
         this.name = weatherData.name;
+
+        this.wind = weatherData.wind.speed;
+        this.sea_level = weatherData.main.sea_level;
+        this.country = weatherData.sys.country;
+        this.humidity = weatherData.main.humidity;
+
+
         this.iconUrl = `https://api.openweathermap.org/img/w/${weatherData.weather[0].icon}.png`;
         const d = new Date();
         this.date = d.getDate() + '-' + this.monthName[d.getMonth()] + '-' + d.getFullYear();
         this.time = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
         console.log(weatherData);
     }
-})
+});
 
 
 </script>
