@@ -18,7 +18,8 @@
                     <tbody>
                         <tr>
                             <th>Sea Level</th>
-                            <th>{{sea_level}}</th>
+                            <th v-if="sea_level > 0">{{sea_level}}</th>
+                            <th v-else>Null</th>
                         </tr>
                         <tr>
                             <th>Humidity</th>
@@ -35,7 +36,7 @@
 
                 <div id="div_Form" class="d-flex m-3 justify-content-center">
                     <form action="">
-                        <input type="button" value="Change Location" class="btn change-btn btn-primary">
+                        <input type="button" value="Change Location" @click="changeLocation" class="btn change-btn btn-primary">
                     </form>
                 </div>
             </div>
@@ -93,6 +94,11 @@ export default (await import('vue')).defineComponent({
                 "November",
                 "December"
             ],
+        }
+    },
+    methods: {
+        changeLocation(){
+            window.location.reload();
         }
     },
 

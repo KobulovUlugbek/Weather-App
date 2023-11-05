@@ -3,8 +3,8 @@
         <div v-if="loading" class="loading">Loading ....</div>
         <ul v-else class="p-0">
             <li v-for="day in forecast" :key="day.date" class="li-active">
-                <div class="py-3"><img :src="iconUrl"></div>
-                <div class="py-3">{{day.date}}</div>
+                <div class="py-3"><img :src="day.iconUrl"></div>
+                <div class="py-3">{{getDayName(day.date)}}</div>
                 <div class="py-3">{{day.temperature}}:&deg;C</div>
             </li>
         </ul>
@@ -57,18 +57,25 @@ export default {
                         iconUrl: `https://api.openweathermap.org/img/w/${item.weather[0].icon}.png`,
                     };
                 }).reduce((acc, item) => {
-                    if(!acc.some(day => day.date.isSame(item.data, 'day'))){
+                    if(!acc.some(day => day.date.isSame(item.date, 'day'))){
                         acc.push(item);
                     }
                     return acc;
                 }, []).slice(1, 5);
-                console.log(filterData, "working")
+                console.log(filterData, "working");
+                this.forecast = filterData;
+                this.loading = false;
             }).catch(error => {
                 console.error( 'Error fetching weather data: ', error);
                 this.loading = false;
             })
+        },
+        getDayName(date){
+            return date.format('ddd');
         }
+
     }
+    
 }
 
 </script>
