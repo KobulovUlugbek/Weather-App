@@ -31,9 +31,7 @@
                     </tbody>
                 </table>
 
-                <DaysWeather>
-
-                </DaysWeather>
+                <DaysWeather :cityname="cityname"></DaysWeather>
 
                 <div id="div_Form" class="d-flex m-3 justify-content-center">
                     <form action="">
@@ -70,6 +68,7 @@ export default (await import('vue')).defineComponent({
     },
     data() {
         return {
+            cityname: this.city,
             temperature: null,
             description: null,
             iconUrl: null,
